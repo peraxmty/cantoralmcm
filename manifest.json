@@ -10,6 +10,7 @@
   {
     "src": "desktop.png",
     "sizes": "1280x720",
+    "form-factor": "wide",
     "type": "image/png"
   }
 ],
