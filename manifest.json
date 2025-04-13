@@ -10,7 +10,12 @@
   {
     "src": "desktop.png",
     "sizes": "1280x720",
-    "form-factor": "wide",
+    "form_factor": "wide",
+    "type": "image/png"
+  },
+  {
+    "src": "mobile.png",
+    "sizes": "1280x720",
     "type": "image/png"
   }
 ],
