@@ -1,0 +1,30 @@
+{
+   "name": "Cantoral MCM",
+   "short_name": "Cantoral MCM",
+   "start_url": "https://cantoral.longwire.one",
+   "description": "Cantoral de Misión Católica Matrimonial",
+   "scope": "/",
+   "id": "/",
+   "display": "standalone",
+   "screenshots": [
+  {
+    "src": "desktop.png",
+    "sizes": "1280x720",
+    "type": "image/png"
+  }
+]
+   "icons": [
+     {
+       "src": "mcm-icono.png",
+       "type": "image/png",
+       "sizes": "512x512"
+     },
+     {
+       "src": "mcm-icono-192.png",
+       "type": "image/png",
+       "sizes": "192x192"
+     }
+   ],
+   "theme_color": "#FFFFFF",
+   "background_color": "#FFFFFF"
+ }

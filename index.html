@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <title>Cantoral MCM</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=400, user-scalable=0" />
+    <link rel="manifest" href="/manifest.json">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+        <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./serviceWorker.js')
+              .then(function(registration) {
+                // Registration was successful
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+              }).catch(function(err) {
+                // registration failed :(
+                console.log('ServiceWorker registration failed: ', err);
+              });
+          }
+        </script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar fixed-top nav navbar-light bg-secondary py-1">
+            <div class="container">
+                <a href="">
+                    <img class="float-start mb-2" src="mcm-logo.png" style="width: 60px">
+                </a>
+                <p class="h4 text-white float-start mt-2">CANTORAL MCM</p>
+                
+                <form class="d-flex" role="search">
+                    <input type="search" class="form-control float-end" style="width: 7em" id="autocompleteInput"
+                        placeholder="# canto" autocomplete="off">
+                    <div id="autocompleteResults" class="list-group position-absolute w-50 d-none" </div>
+                    </div>
+
+                    <script>
+
+                        const input = document.getElementById('autocompleteInput');
+                        const resultsContainer = document.getElementById('autocompleteResults');
+
+                        input.addEventListener('input', function () {
+                            const inputValue = this.value.toLowerCase();
+                            const filteredData = sampleData.filter(item =>
+                                item.toLowerCase().includes(inputValue)
+                            );
+
+                            resultsContainer.innerHTML = '';
+
+                            if (inputValue.length > 0 && filteredData.length > 0) {
+                                filteredData.forEach(item => {
+                                    const resultItem = document.createElement('a');
+                                    resultItem.classList.add('list-group-item', 'list-group-item-action');
+                                    resultItem.textContent = item;
+                                    resultItem.addEventListener('click', function () {
+                                        input.value = item;
+                                        resultsContainer.classList.add('d-none');
+                                    });
+                                    resultsContainer.appendChild(resultItem);
+                                });
+                                resultsContainer.classList.remove('d-none');
+                            } else {
+                                resultsContainer.classList.add('d-none');
+                            }
+                        });
+
+                        document.addEventListener('click', function (e) {
+                            if (e.target !== input) {
+                                resultsContainer.classList.add('d-none');
+                            }
+                        });
+                    </script>
+                    <button class="btn btn-dark float-end" onclick="actualiza()" type="button">Ir</button>
+                    <script>
+                        function actualiza() {
+                            var canto = document.getElementById('autocompleteInput').value;
+                            var audioElement = document.getElementById('player');
+                            audioElement.src = 'assets/audio/' + canto + '.mp3';
+                            // audioElement.load();
+
+                            fetch(canto + '.html')
+                                .then(response => response.text())
+                                .then(data => {
+                                    document.getElementById('canto').innerHTML = data;
+                                })
+                                .catch(error => console.error('Error fetching data:', error));
+                        };
+                    </script>
+                </form>
+
+            </div>
+        </nav>
+    </header>
+    <main class>
+        <div class="container mt-2 pt-5 ps-2 pe-2">
+            <div class="row text-black" id="canto">
+            </div>
+        </div>
+    </main>
+    <footer class="fixed-bottom bg-secondary text-white py-1">
+        <div class="container">
+            <div class="row" id="footerContent">
+                <audio controls id="player" class="col-md-6 offset-md-3" source src="" controlslist="nodownload noplaybackrate"
+                    type="audio/mpeg" />El audio no es soportado</audio>
+            </div>
+        </div>
+    </footer>
+    <script>
+        window.onload = function () {
+            let canto = 1
+            var audioElement = document.getElementById('player');
+            audioElement.src = 'assets/audio/' + canto + '.mp3';
+            //audioElement.load();
+
+            fetch(canto + '.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('canto').innerHTML = data;
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        };
+    </script>
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</body>
+
+</html>
