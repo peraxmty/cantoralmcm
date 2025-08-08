@@ -1,139 +1,322 @@
+
 <!doctype html>
 <html lang="es">
 
 <head>
     <title>Cantoral MCM</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=400, user-scalable=0" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
     <link rel="manifest" href="/manifest.json">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-        <script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+    <style>
+        #autocompleteResults {
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            right: 0;
+            width: 300px;
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 0.25rem;
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+        }
+        /* Sombra para la barra de navegación superior */
+        .navbar.fixed-top {
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+        }
+        /* Sombra para el pie de página */
+        .fixed-bottom {
+            box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.2);
+        }
+        /* Estilos para modo claro (predeterminado) */
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.light-mode #autocompleteResults {
+            background-color: #f8f9fa;
+            border-color: #ccc;
+        }
+        body.light-mode .navbar.bg-secondary {
+            background-color: #6c757d !important;
+        }
+        body.light-mode .fixed-bottom.bg-secondary {
+            background-color: #6c757d !important;
+        }
+        body.light-mode .text-black {
+            color: #000000 !important;
+        }
+        /* Estilos para modo oscuro */
+        body.dark-mode {
+            background-color: #212529;
+            color: #ffffff;
+        }
+        body.dark-mode #autocompleteResults {
+            background-color: #343a40;
+            border-color: #495057;
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
+        }
+        body.dark-mode .navbar.bg-secondary {
+            background-color: #343a40 !important;
+        }
+        body.dark-mode .fixed-bottom.bg-secondary {
+            background-color: #343a40 !important;
+        }
+        body.dark-mode .text-black {
+            color: #ffffff !important;
+        }
+        body.dark-mode .form-control {
+            background-color: #495057;
+            color: #ffffff;
+            border-color: #6c757d;
+        }
+        body.dark-mode .form-control::placeholder {
+            color: #adb5bd;
+        }
+        body.dark-mode .list-group-item {
+            background-color: #343a40;
+            color: #ffffff;
+        }
+        body.dark-mode .list-group-item:hover {
+            background-color: #495057;
+        }
+    </style>
+    <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./serviceWorker.js')
-              .then(function(registration) {
-                // Registration was successful
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-              }).catch(function(err) {
-                // registration failed :(
-                console.log('ServiceWorker registration failed: ', err);
-              });
-          }
-        </script>
+                .then(function (registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }).catch(function (err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+        }
+    </script>
 </head>
 
-<body>
-    <header>
-        <nav class="navbar fixed-top nav navbar-light bg-secondary py-1">
-            <div class="container">
-                <a href="">
-                    <img class="float-start mb-2" src="mcm-logo.png" style="width: 60px">
+<body class="light-mode">
+<header>
+    <nav class="navbar fixed-top navbar-light bg-secondary py-1">
+        <div class="container-fluid">
+            <div class="d-flex align-items-end">
+                <a href="https://www.mcm.org.mx/">
+                    <img src="mcm-logo.png" style="width: 60px" alt="MCM Logo">
                 </a>
-                <p class="h4 text-white float-start mt-2">CANTORAL MCM</p>
-                
-                <form class="d-flex" role="search">
-                    <input type="search" class="form-control float-end" style="width: 7em" id="autocompleteInput"
-                        placeholder="# canto" autocomplete="off">
-                    <div id="autocompleteResults" class="list-group position-absolute w-50 d-none" </div>
-                    </div>
-
-                    <script>
-
-                        const input = document.getElementById('autocompleteInput');
-                        const resultsContainer = document.getElementById('autocompleteResults');
-
-                        input.addEventListener('input', function () {
-                            const inputValue = this.value.toLowerCase();
-                            const filteredData = sampleData.filter(item =>
-                                item.toLowerCase().includes(inputValue)
-                            );
-
-                            resultsContainer.innerHTML = '';
-
-                            if (inputValue.length > 0 && filteredData.length > 0) {
-                                filteredData.forEach(item => {
-                                    const resultItem = document.createElement('a');
-                                    resultItem.classList.add('list-group-item', 'list-group-item-action');
-                                    resultItem.textContent = item;
-                                    resultItem.addEventListener('click', function () {
-                                        input.value = item;
-                                        resultsContainer.classList.add('d-none');
-                                    });
-                                    resultsContainer.appendChild(resultItem);
-                                });
-                                resultsContainer.classList.remove('d-none');
-                            } else {
-                                resultsContainer.classList.add('d-none');
-                            }
-                        });
-
-                        document.addEventListener('click', function (e) {
-                            if (e.target !== input) {
-                                resultsContainer.classList.add('d-none');
-                            }
-                        });
-                    </script>
-                    <button class="btn btn-dark float-end" onclick="actualiza()" type="button">Ir</button>
-                    <script>
-                        function actualiza() {
-                            var canto = document.getElementById('autocompleteInput').value;
-                            var audioElement = document.getElementById('player');
-                            audioElement.src = 'assets/audio/' + canto + '.mp3';
-                            // audioElement.load();
-
-                            fetch(canto + '.html')
-                                .then(response => response.text())
-                                .then(data => {
-                                    document.getElementById('canto').innerHTML = data;
-                                })
-                                .catch(error => console.error('Error fetching data:', error));
-                        };
-                    </script>
-                </form>
-
+                <h4 class="text-white mb-0 ms-2">Cantoral</h4>
             </div>
-        </nav>
-    </header>
-    <main class>
-        <div class="container mt-2 pt-5 ps-2 pe-2">
-            <div class="row text-black" id="canto">
+            <form class="d-flex position-relative" role="search">
+                <input type="search" class="form-control" style="width: 5em" id="autocompleteInput"
+                    placeholder="Busca" autocomplete="off">
+                <button id="themeToggleBtn" class="btn btn-secondary ms-1" type="button" title="Cambiar modo">
+                    <i class="bi bi-moon"></i>
+                </button>
+                <button id="fullscreenBtn" class="btn btn-secondary ms-1 " type="button">⛶</button>
+                <div id="autocompleteResults" class="list-group position-absolute mt-5 d-none"></div>
+            </form>
+        </div>
+    </nav>
+</header>
+<script>
+    let sampleData = [];
+
+    // Cargar la lista de cánticos desde el archivo JSON
+    fetch('assets/cantos.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No se pudo cargar cantos.json');
+            }
+            return response.json();
+        })
+        .then(data => {
+            sampleData = data;
+            initializeAutocomplete();
+            loadInitialCanto();
+        })
+        .catch(error => {
+            console.error('Error al cargar cantos.json:', error);
+            alert('Error al cargar la lista de cánticos. Por favor, intenta de nuevo.');
+        });
+
+    function actualizar() {
+        var canto = document.getElementById('autocompleteInput').value.trim();
+        var cantoTexto = canto;
+        canto = canto.split(' ')[0];
+
+        var audioElement = document.getElementById('player');
+        audioElement.src = 'assets/audio/' + canto + '.mp3';
+
+        fetch('assets/html/' + canto + '.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Cántico no encontrado');
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('canto').innerHTML = '<p></p><center><strong>' + cantoTexto + '</center></strong>' + data;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                document.getElementById('canto').innerHTML = '<p>Error al cargar el cántico. Por favor, intenta con otro.</p>';
+            });
+
+        var input = document.getElementById('autocompleteInput');
+        input.value = '';
+    }
+
+    function initializeAutocomplete() {
+        const input = document.getElementById('autocompleteInput');
+        const resultsContainer = document.getElementById('autocompleteResults');
+
+        input.addEventListener('input', function () {
+            const inputValue = this.value.toLowerCase();
+            const filteredData = sampleData.filter(item =>
+                item.toLowerCase().includes(inputValue)
+            ).slice(0, 50);
+
+            resultsContainer.innerHTML = '';
+
+            if (inputValue.length > 0 && filteredData.length > 0) {
+                filteredData.forEach(item => {
+                    const resultItem = document.createElement('a');
+                    resultItem.classList.add('list-group-item', 'list-group-item-action');
+                    resultItem.textContent = item;
+                    resultItem.addEventListener('click', function () {
+                        input.value = item;
+                        resultsContainer.classList.add('d-none');
+                        actualizar();
+                    });
+                    resultsContainer.appendChild(resultItem);
+                });
+                resultsContainer.classList.remove('d-none');
+            } else {
+                resultsContainer.classList.add('d-none');
+            }
+        });
+
+        document.addEventListener('click', function (e) {
+            if (e.target !== input) {
+                resultsContainer.classList.add('d-none');
+            }
+        });
+    }
+
+    function loadInitialCanto() {
+        let canto = '1';
+        var cantoTexto = sampleData.find(item => item.startsWith(canto + ' -')) || '1 - NACIMOS EN UNA BATALLA';
+        var audioElement = document.getElementById('player');
+        audioElement.src = 'assets/audio/' + canto + '.mp3';
+
+        fetch('assets/html/' + canto + '.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Cántico inicial no encontrado');
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('canto').innerHTML = '<p></p><center><strong>' + cantoTexto + '</strong></center>' + data;
+            })
+            .catch(error => {
+                console.error('Error fetching initial canto:', error);
+                document.getElementById('canto').innerHTML = '<p>Error al cargar el cántico inicial.</p>';
+            });
+    }
+
+    // Lógica para alternar modo oscuro/claro
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    themeToggleBtn.addEventListener('click', () => {
+        const body = document.body;
+        if (body.classList.contains('light-mode')) {
+            body.classList.remove('light-mode');
+            body.classList.add('dark-mode');
+            themeToggleBtn.innerHTML = '<i class="bi bi-sun"></i>';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            body.classList.remove('dark-mode');
+            body.classList.add('light-mode');
+            themeToggleBtn.innerHTML = '<i class="bi bi-moon"></i>';
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
+    // Cargar preferencia de tema al iniciar
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        const body = document.body;
+        if (savedTheme === 'dark') {
+            body.classList.remove('light-mode');
+            body.classList.add('dark-mode');
+            themeToggleBtn.innerHTML = '<i class="bi bi-sun"></i>';
+        } else {
+            body.classList.add('light-mode');
+            themeToggleBtn.innerHTML = '<i class="bi bi-moon"></i>';
+        }
+    });
+</script>
+<main>
+    <div class="container mt-2 pt-5 pb-5 ps-2 pe-2">
+        <div class="row text-black" id="canto">
+        </div>
+    </div>
+</main>
+<footer id="footer" class="fixed-bottom bg-secondary text-white py-1">
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between" id="footerContent">
+            <div class="flex-grow-1 me-2" id="audioContainer">
+                <audio controls id="player" class="w-100" controlslist="nodownload noplaybackrate" type="audio/mpeg">
+                    El audio no es soportado
+                </audio>
             </div>
         </div>
-    </main>
-    <footer class="fixed-bottom bg-secondary text-white py-1">
-        <div class="container">
-            <div class="row" id="footerContent">
-                <audio controls id="player" class="col-md-6 offset-md-3" source src="" controlslist="nodownload noplaybackrate"
-                    type="audio/mpeg" />El audio no es soportado</audio>
-            </div>
-        </div>
-    </footer>
-    <script>
-        window.onload = function () {
-            let canto = 1
-            var audioElement = document.getElementById('player');
-            audioElement.src = 'assets/audio/' + canto + '.mp3';
-            //audioElement.load();
+    </div>
+</footer>
+<button id="toggleFooterBtn" 
+        class="btn btn-secondary position-fixed" 
+        style="bottom: 70px; right: 0px; z-index: 1050;" 
+        type="button" 
+        title="Mostrar/Ocultar pie de página">
+    <i class="bi bi-music-note text-white"></i>
+</button>
+<script>
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
 
-            fetch(canto + '.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('canto').innerHTML = data;
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        };
-    </script>
+    fullscreenBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().then(() => {
+                fullscreenBtn.textContent = '⛶';
+            }).catch(err => {
+                alert(`Error al activar pantalla completa: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen().then(() => {
+                fullscreenBtn.textContent = '⛶';
+            });
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    crossorigin="anonymous"></script>
+<script>
+    const toggleFooterBtn = document.getElementById('toggleFooterBtn');
+    const footer = document.getElementById('footer');
+    const icon = toggleFooterBtn.querySelector('i');
 
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-        crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    toggleFooterBtn.addEventListener('click', () => {
+        if (footer.style.display === 'none') {
+            footer.style.display = '';
+            icon.className = 'bi bi-music-note text-white';
+            toggleFooterBtn.style.bottom = '70px'; // botón arriba del footer visible
+        } else {
+            footer.style.display = 'none';
+            icon.className = 'bi bi-music-note text-white';
+            toggleFooterBtn.style.bottom = '5px'; // botón pegado al borde inferior cuando footer oculto
+        }
+    });
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </body>
 
 </html>
