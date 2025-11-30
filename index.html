@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="es">
 
@@ -21,11 +22,11 @@
             border-radius: 0.25rem;
             box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
         }
-        /* Sombra para la barra de navegaciÃ³n superior */
+        /* Sombra para la barra de navegación superior */
         .navbar.fixed-top {
             box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
         }
-        /* Sombra para el pie de pÃ¡gina */
+        /* Sombra para el pie de página */
         .fixed-bottom {
             box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.2);
         }
@@ -82,6 +83,58 @@
         body.dark-mode .list-group-item:hover {
             background-color: #495057;
         }
+        /* Estilos para el menú hamburguesa */
+        .hamburger-menu {
+            position: relative;
+        }
+        .hamburger-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+        .menu-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #6c757d;
+            border-radius: 0.25rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: none;
+            min-width: 200px;
+            z-index: 1100;
+            margin-top: 5px;
+        }
+        .menu-dropdown.show {
+            display: block;
+        }
+        .menu-dropdown button {
+            width: 100%;
+            text-align: left;
+            padding: 12px 20px;
+            border: none;
+            background: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.2s;
+        }
+        .menu-dropdown button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .menu-dropdown button i {
+            width: 20px;
+        }
+        body.dark-mode .menu-dropdown {
+            background-color: #343a40;
+        }
+        body.dark-mode .menu-dropdown button:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
     </style>
     <script>
         if ('serviceWorker' in navigator) {
@@ -101,22 +154,34 @@
         <div class="container-fluid">
             <div class="d-flex align-items-end">
                 <a href="https://www.mcm.org.mx/">
-                    <img src="mcm-logo.png" style="width: 60px" alt="MCM Logo">
+                    <img src="mcm-logo-2.png" style="width: 160px" alt="MCM Logo">
                 </a>
-                <h4 class="text-white mb-0 ms-2">Cantoral</h4>
             </div>
             <form class="d-flex position-relative" role="search">
-                <input type="search" class="form-control" style="width: 4em" id="autocompleteInput"
+                <input type="search" class="form-control" style="width: 6em" id="autocompleteInput"
                     placeholder="&#x1F50D;" autocomplete="off">
-                <button id="themeToggleBtn" class="btn btn-secondary ms-1" type="button" title="Cambiar modo">
-                    <i class="bi bi-moon"></i>
-                </button>
-                <button id="fullscreenBtn" class="btn btn-secondary ms-1" title="Pantalla completa"  type="button">
-		    <i class="bi bi-fullscreen"></i>
-		</button>
-                <button id="commentsBtn" class="btn btn-secondary ms-1" type="button" title="Enviar comentarios" onclick="window.open('https://wa.me/528186014157?text=Comentarios%20Cantoral%20MCM:')">
-		    <i class="bi bi-envelope"></i>
-		</button>
+                
+                <!-- Menú Hamburguesa -->
+                <div class="hamburger-menu ms-1">
+                    <button class="hamburger-btn" type="button" id="hamburgerBtn" title="Menú">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="menu-dropdown" id="menuDropdown">
+                        <button id="themeToggleBtn" type="button">
+                            <i class="bi bi-moon"></i>
+                            <span>Cambiar modo</span>
+                        </button>
+                        <button id="fullscreenBtn" type="button">
+                            <i class="bi bi-fullscreen"></i>
+                            <span>Pantalla completa</span>
+                        </button>
+                        <button id="commentsBtn" type="button" onclick="window.open('https://wa.me/528186014157?text=Comentarios%20Cantoral%20MCM:')">
+                            <i class="bi bi-envelope"></i>
+                            <span>Enviar comentarios</span>
+                        </button>
+                    </div>
+                </div>
+                
                 <div id="autocompleteResults" class="list-group position-absolute mt-5 d-none"></div>
             </form>
         </div>
@@ -125,7 +190,7 @@
 <script>
     let sampleData = [];
 
-    // Cargar la lista de cÃ¡nticos desde el archivo JSON
+    // Cargar la lista de cánticos desde el archivo JSON
     fetch('assets/cantos.json')
         .then(response => {
             if (!response.ok) {
@@ -154,7 +219,7 @@
         fetch('assets/html/c' + canto + '.html')
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('CÃ¡ntico no encontrado');
+                    throw new Error('Cántico no encontrado');
                 }
                 return response.text();
             })
@@ -163,7 +228,7 @@
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
-                document.getElementById('canto').innerHTML = '<p>Error al cargar el cÃ¡ntico. Por favor, intenta con otro.</p>';
+                document.getElementById('canto').innerHTML = '<p>Error al cargar el cántico. Por favor, intenta con otro.</p>';
             });
 
         var input = document.getElementById('autocompleteInput');
@@ -216,7 +281,7 @@
         fetch('assets/html/c' + canto + '.html')
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('CÃ¡ntico inicial no encontrado');
+                    throw new Error('Cántico inicial no encontrado');
                 }
                 return response.text();
             })
@@ -225,38 +290,57 @@
             })
             .catch(error => {
                 console.error('Error fetching initial canto:', error);
-                document.getElementById('canto').innerHTML = '<p>Error al cargar el cÃ¡ntico inicial.</p>';
+                document.getElementById('canto').innerHTML = '<p>Error al cargar el cántico inicial.</p>';
             });
     }
 
-    // LÃ³gica para alternar modo oscuro/claro
+    // Lógica del menú hamburguesa
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const menuDropdown = document.getElementById('menuDropdown');
+
+    hamburgerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menuDropdown.classList.toggle('show');
+    });
+
+    // Cerrar menú al hacer clic fuera
+    document.addEventListener('click', (e) => {
+        if (!menuDropdown.contains(e.target) && e.target !== hamburgerBtn) {
+            menuDropdown.classList.remove('show');
+        }
+    });
+
+    // Lógica para alternar modo oscuro/claro
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     themeToggleBtn.addEventListener('click', () => {
         const body = document.body;
+        const icon = themeToggleBtn.querySelector('i');
         if (body.classList.contains('light-mode')) {
             body.classList.remove('light-mode');
             body.classList.add('dark-mode');
-            themeToggleBtn.innerHTML = '<i class="bi bi-sun"></i>';
+            icon.className = 'bi bi-sun';
             localStorage.setItem('theme', 'dark');
         } else {
             body.classList.remove('dark-mode');
             body.classList.add('light-mode');
-            themeToggleBtn.innerHTML = '<i class="bi bi-moon"></i>';
+            icon.className = 'bi bi-moon';
             localStorage.setItem('theme', 'light');
         }
+        menuDropdown.classList.remove('show');
     });
 
     // Cargar preferencia de tema al iniciar
     document.addEventListener('DOMContentLoaded', () => {
         const savedTheme = localStorage.getItem('theme') || 'light';
         const body = document.body;
+        const icon = themeToggleBtn.querySelector('i');
         if (savedTheme === 'dark') {
             body.classList.remove('light-mode');
             body.classList.add('dark-mode');
-            themeToggleBtn.innerHTML = '<i class="bi bi-sun"></i>';
+            icon.className = 'bi bi-sun';
         } else {
             body.classList.add('light-mode');
-            themeToggleBtn.innerHTML = '<i class="bi bi-moon"></i>';
+            icon.className = 'bi bi-moon';
         }
     });
 </script>
@@ -281,7 +365,7 @@
         class="btn btn-secondary position-fixed" 
         style="bottom: 70px; right: 0px; z-index: 1050;" 
         type="button" 
-        title="Mostrar/Ocultar pie de pÃ¡gina">
+        title="Mostrar/Ocultar pie de página">
     <i class="bi bi-music-note text-white"></i>
 </button>
 <script>
@@ -290,15 +374,16 @@
     fullscreenBtn.addEventListener('click', () => {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().then(() => {
-                fullscreenBtn.innerHtml = '<i class="bi bi-fullscreen-exit"></i>';
+                fullscreenBtn.querySelector('i').className = 'bi bi-fullscreen-exit';
             }).catch(err => {
                 alert(`Error al activar pantalla completa: ${err.message}`);
             });
         } else {
             document.exitFullscreen().then(() => {
-                fullscreenBtn.innerHtml = '<i class="bi bi-fullscreen-exit"></i>';
+                fullscreenBtn.querySelector('i').className = 'bi bi-fullscreen';
             });
         }
+        menuDropdown.classList.remove('show');
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
@@ -314,11 +399,11 @@
         if (footer.style.display === 'none') {
             footer.style.display = '';
             icon.className = 'bi bi-music-note text-white';
-            toggleFooterBtn.style.bottom = '70px'; // botÃ³n arriba del footer visible
+            toggleFooterBtn.style.bottom = '70px';
         } else {
             footer.style.display = 'none';
             icon.className = 'bi bi-music-note text-white';
-            toggleFooterBtn.style.bottom = '5px'; // botÃ³n pegado al borde inferior cuando footer oculto
+            toggleFooterBtn.style.bottom = '5px';
         }
     });
 </script>
